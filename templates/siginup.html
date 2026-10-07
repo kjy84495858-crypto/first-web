@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘 뭐먹지 - 로그인</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        skyBrand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(14, 165, 233, 0.12)',
+                        'glow': '0 0 25px -5px rgba(14, 165, 233, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts (Noto Sans KR) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS Styles -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Glassmorphism Background */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(224, 242, 254, 0.8);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(224, 242, 254, 0.8);
+        }
+
+        /* Hero Animated Gradient Grid */
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(14, 165, 233, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Pulse Animation */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+<!-- ========================================================= -->
+<!-- [상단 네비게이션 바]                                       -->
+<!-- 수정된 Flask 경로 반영 (/login, /signup, /mypage)          -->
+<!-- ========================================================= -->
+<header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <!-- 로고 영역 -->
+        <a href="/" class="flex items-center gap-3 group">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-skyBrand-600 to-skyBrand-400 flex items-center justify-center text-white text-xl shadow-lg shadow-skyBrand-500/30 group-hover:scale-105 transition-transform duration-300">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <div>
+                <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-skyBrand-800 via-skyBrand-600 to-skyBrand-500">
+                    오늘 뭐먹지
+                </span>
+                <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-skyBrand-100 text-skyBrand-700 ml-1.5 border border-skyBrand-200">
+                    AI Gem
+                </span>
+            </div>
+        </a>
+
+        <!-- 데스크탑 메뉴 -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <a href="/#recommend-section" class="hover:text-skyBrand-600 transition-colors flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles text-skyBrand-500"></i> AI 요리 추천
+            </a>
+            <a href="/#service-info" class="hover:text-skyBrand-600 transition-colors">서비스 소개</a>
+            <a href="/#how-it-works" class="hover:text-skyBrand-600 transition-colors">사용방법</a>
+            <a href="/#faq-section" class="hover:text-skyBrand-600 transition-colors">FAQ</a>
+        </nav>
+
+        <!-- Flask 회원이동 네비게이션 버튼 (/signup 적용) -->
+        <div class="hidden sm:flex items-center gap-3">
+            <a href="/login" class="px-4 py-2 text-sm font-semibold text-skyBrand-700 bg-skyBrand-50 rounded-xl transition-all">
+                로그인
+            </a>
+            <a href="/signup" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-skyBrand-600 rounded-xl hover:bg-skyBrand-50 transition-all">
+                회원가입
+            </a>
+            <a href="/mypage" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-skyBrand-500 to-skyBrand-600 hover:from-skyBrand-600 hover:to-skyBrand-700 rounded-xl transition-all shadow-md shadow-skyBrand-500/20 flex items-center gap-1.5">
+                <i class="fa-regular fa-user"></i> 마이페이지
+            </a>
+        </div>
+
+        <!-- 모바일 토글 버튼 -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 hover:text-skyBrand-600 focus:outline-none">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- 모바일 드롭다운 메뉴 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-b border-skyBrand-100 px-4 pt-2 pb-6 space-y-3">
+        <a href="/#recommend-section" class="block py-2 text-slate-700 font-medium hover:text-skyBrand-600">AI 요리 추천</a>
+        <a href="/#service-info" class="block py-2 text-slate-700 font-medium hover:text-skyBrand-600">서비스 소개</a>
+        <a href="/#how-it-works" class="block py-2 text-slate-700 font-medium hover:text-skyBrand-600">사용방법</a>
+        <a href="/#faq-section" class="block py-2 text-slate-700 font-medium hover:text-skyBrand-600">FAQ</a>
+        <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+            <a href="/login" class="w-full text-center py-2.5 text-sm font-semibold text-skyBrand-700 bg-skyBrand-50 border border-skyBrand-200 rounded-xl">로그인</a>
+            <a href="/signup" class="w-full text-center py-2.5 text-sm font-semibold text-slate-700 bg-slate-100 rounded-xl">회원가입</a>
+            <a href="/mypage" class="w-full text-center py-2.5 text-sm font-semibold text-white bg-skyBrand-600 rounded-xl">마이페이지</a>
+        </div>
+    </div>
+</header>
+
+<main class="flex-grow flex items-center justify-center py-12 lg:py-20 relative overflow-hidden bg-gradient-to-b from-skyBrand-50/70 via-white to-slate-50">
+    <!-- 배경 그라데이션 원 및 그리드 패턴 -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-skyBrand-300/30 to-blue-200/30 blur-3xl rounded-full pointer-events-none animate-pulse-slow"></div>
+    <div class="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none"></div>
+
+    <div class="max-w-md w-full mx-auto px-4 sm:px-6 relative z-10">
+        
+        <!-- 로그인 카드 컨테이너 -->
+        <div class="glass-card rounded-3xl p-8 sm:p-10 shadow-glass relative">
+            
+            <!-- 상단 타이틀 -->
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-skyBrand-600 to-skyBrand-400 flex items-center justify-center text-white text-2xl shadow-lg shadow-skyBrand-500/30 mx-auto mb-4">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">다시 오신 것을 환영해요!</h1>
+                <p class="text-slate-500 text-sm mt-1.5">로그인하고 나만의 맞춤 레시피를 관리하세요.</p>
+            </div>
+
+            <!-- Flask form 입력 영역 -->
+            <form action="/login" method="POST" class="space-y-5">
+                <div>
+                    <label for="email" class="block text-slate-800 font-bold text-sm mb-1.5">이메일 주소</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i class="fa-regular fa-envelope"></i>
+                        </span>
+                        <input type="email" id="email" name="email" required placeholder="example@email.com" 
+                            class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-2 border-skyBrand-100 bg-white text-slate-700 text-sm font-medium focus:border-skyBrand-500 focus:ring-4 focus:ring-skyBrand-100 transition-all outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label for="password" class="block text-slate-800 font-bold text-sm">비밀번호</label>
+                        <a href="#" class="text-xs text-skyBrand-600 hover:underline font-semibold">비밀번호를 잊으셨나요?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="password" name="password" required placeholder="비밀번호를 입력하세요" 
+                            class="w-full pl-11 pr-4 py-3.5 rounded-2xl border-2 border-skyBrand-100 bg-white text-slate-700 text-sm font-medium focus:border-skyBrand-500 focus:ring-4 focus:ring-skyBrand-100 transition-all outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center text-sm py-1">
+                    <label class="flex items-center gap-2 cursor-pointer select-none text-slate-600">
+                        <input type="checkbox" name="remember" class="w-4 h-4 rounded text-skyBrand-600 focus:ring-skyBrand-500 border-slate-300">
+                        <span>로그인 상태 유지</span>
+                    </label>
+                </div>
+
+                <button type="submit" 
+                    class="w-full py-4 rounded-2xl bg-gradient-to-r from-skyBrand-600 via-skyBrand-500 to-cyan-500 hover:from-skyBrand-700 hover:to-cyan-600 text-white font-extrabold text-base shadow-lg shadow-skyBrand-500/30 hover:shadow-skyBrand-500/50 hover:scale-[1.01] transition-all flex items-center justify-center gap-2">
+                    <span>로그인하기</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- 회원가입 안내 푸터 (/signup 적용) -->
+            <div class="mt-8 pt-6 border-t border-slate-100 text-center text-sm text-slate-500">
+                아직 계정이 없으신가요? 
+                <a href="/signup" class="text-skyBrand-600 font-bold hover:underline ml-1">회원가입하기</a>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<!-- ========================================================= -->
+<!-- [푸터 영역]                                               -->
+<!-- ========================================================= -->
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-slate-800 pb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-skyBrand-600 flex items-center justify-center text-white text-lg">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <span class="text-xl font-extrabold text-white">오늘 뭐먹지</span>
+            </div>
+            
+            <div class="flex items-center gap-6 text-sm">
+                <a href="/login" class="hover:text-white transition-colors">로그인</a>
+                <a href="/signup" class="hover:text-white transition-colors">회원가입</a>
+                <a href="/mypage" class="hover:text-white transition-colors">마이페이지</a>
+            </div>
+        </div>
+
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <p>© 2026 오늘 뭐먹지 (Flask AI Gem Project). All rights reserved.</p>
+            <p class="text-slate-500">본 사이트는 Gemini API 연결을 위한 UI 구조 데모 페이지입니다.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- 모바일 메뉴 토글 스크립트 -->
+<script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
+</script>
+
+</body>
+</html>
